@@ -46,33 +46,42 @@
 void dummy_task1(void)
 {
 	uint8_t counter = 0;
+	TickType_t xLastWakeTime;
+	const TickType_t xPeriod = pdMS_TO_TICKS(2000);
+	xLastWakeTime = xTaskGetTickCount();
 	for (;;)
 	{
 		PRINTF("IN TASK 1: %i +++++++++++++++\r\n", counter);
 		counter++;
-		vTaskDelay(200);
+		vTaskDelayUntil(&xLastWakeTime, xPeriod);
 	}
 }
 
 void dummy_task2(void)
 {
 	uint8_t counter = 0;
+	TickType_t xLastWakeTime;
+	const TickType_t xPeriod = pdMS_TO_TICKS(1000);
+	xLastWakeTime = xTaskGetTickCount();
 	for (;;)
 	{
 		PRINTF("IN TASK 2: %i ***************\r\n", counter);
 		counter++;
-		vTaskDelay(100);
+		vTaskDelayUntil(&xLastWakeTime, xPeriod);
 	}
 }
 
 void dummy_task3(void)
 {
 	uint8_t counter = 0;
+	TickType_t xLastWakeTime;
+	const TickType_t xPeriod = pdMS_TO_TICKS(4000);
+	xLastWakeTime = xTaskGetTickCount();
 	for (;;)
 	{
 		PRINTF("IN TASK 3: %i ---------------\r\n", counter);
 		counter++;
-		vTaskDelay(400);
+		vTaskDelayUntil(&xLastWakeTime, xPeriod);
 	}
 }
 
@@ -86,9 +95,9 @@ int main(void)
 	TaskHandle_t dummy2Handle = NULL;
 	TaskHandle_t dummy3Handle = NULL;
 
-	xTaskCreate(&dummy_task1,"DUMMY1",100,(void*)NULL,2,dummy1Handle);
-	xTaskCreate(&dummy_task2,"DUMMY2",100,(void*)NULL,3,dummy2Handle);
-	xTaskCreate(&dummy_task3,"DUMMY3",100,(void*)NULL,2,dummy3Handle);
+	xTaskCreate(dummy_task1,"DUMMY1",110,NULL,2,&dummy1Handle);
+	xTaskCreate(dummy_task2,"DUMMY2",110,NULL,3,&dummy2Handle);
+	xTaskCreate(dummy_task3,"DUMMY3",110,NULL,2,&dummy3Handle);
 	vTaskStartScheduler();
 
 	for (;;)
